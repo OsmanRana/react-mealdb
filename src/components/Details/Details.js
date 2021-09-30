@@ -1,22 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
+import Detail from './Detail/Detail';
 
 const Details = () => {
-    const [meal, setMeal] = useState({})
+    const [meal, setMeal] = useState([])
     console.log(meal)
-    const {mealId} = useParams()
+    const { mealId } = useParams()
     
-    useEffect (() => {
-        const url = `https://www.themealdb.com/api/json/v1/1/search.php?s=`
-        fetch (url)
-        .then (res => res.json())
-        .then (data => setMeal(data))
-    },[])
+    useEffect(() => {
+        const url = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealId}`
+        fetch(url)
+            .then(res => res.json())
+            .then(data => setMeal(data.meals))
+    }, [mealId])
 
     return (
         <div>
             <p>Details: {mealId}</p>
-            <p>{meal.idMeal}</p>
+            {
+                meal.map(element => <Detail
+                key = {element.idMeal}
+                    element = {element}
+                />)
+            }
         </div>
     );
 };
